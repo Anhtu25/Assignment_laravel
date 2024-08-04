@@ -15,8 +15,10 @@ class Product extends Model
         'author_id',
         'publisher_id',
         'year_published',
+        'short_description',
         'description',
         'price',
+        'price_sale',
         'category_id',
         'image',
     ];

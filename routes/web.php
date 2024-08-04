@@ -1,16 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthenController;
+use App\Http\Controllers\AuthenController as AuthenController;
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Admin\AuthorController as AdminAuthorController;
 use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Client\ProductController as ClientProductController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PublisherController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Client\ProductController as ClientProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +52,31 @@ Route::group(['prefix' => 'admins', 'as' => 'admins.', 'middleware' => 'checkAdm
         Route::patch('/update-product/{idProduct}', [AdminProductController::class, 'updateProducts'])->name('updateProducts');
         Route::delete('/delete-product', [AdminProductController::class, 'deleteProduct'])->name('deleteProduct');
     });
+    Route::group(['prefix' => 'categories', 'as' => 'categories.'], function () {
+        Route::get('/list-category', [CategoryController::class, 'listCategories'])->name('listCategories');
+        Route::get('/add-category', [CategoryController::class, 'addCategories'])->name('addCategories');
+        Route::post('/add-category', [CategoryController::class, 'storeCategories'])->name('storeCategories');
+        Route::get('/detail-category/{idCategory}', [CategoryController::class, 'detailCategories'])->name('detailCategories');
+        Route::get('/edit-category/{idCategory}', [CategoryController::class, 'editCategories'])->name('editCategories');
+        Route::patch('/update-category/{idCategory}', [CategoryController::class, 'updateCategories'])->name('updateCategories');
+        Route::delete('/del-category', [CategoryController::class, 'deleteCategories'])->name('deleteCategories');
+    });
+    Route::group(['prefix' => 'authors', 'as' => 'authors.'], function () {
+        Route::get('/list-author',[AdminAuthorController::class,'listAuthors'])->name('listAuthors');
+        Route::get('/add-author',[AdminAuthorController::class,'addAuthors'])->name('addAuthors');
+        Route::post('/add-author',[AdminAuthorController::class,'storeAuthors'])->name('storeAuthors');
+        Route::get('/edit-author/{idAuthor}',[AdminAuthorController::class,'editAuthors'])->name('editAuthors');
+        Route::patch('/update-author/{idAuthor}',[AdminAuthorController::class,'updateAuthors'])->name('updateAuthors');
+        Route::delete('/delete-author',[AdminAuthorController::class,'deleteAuthors'])->name('deleteAuthors');
+    });
+    Route::group(['prefix' => 'publishers', 'as' => 'publishers.'], function(){
+        Route::get('/list-publisher',[PublisherController::class,'listPublishers'])->name('listPublishers');
+        Route::get('/add-publisher',[PublisherController::class,'addPublishers'])->name('addPublishers');
+        Route::post('/add-publisher',[PublisherController::class,'storePublishers'])->name('storePublishers');
+        Route::get('/edit-publishers/{idPublisher}',[PublisherController::class,'editPublishers'])->name('editPublishers');
+        Route::patch('/update-publishers/{idPublisher}',[PublisherController::class,'updatePublishers'])->name('updatePublishers');
+        Route::delete('/delete-publisher',[PublisherController::class,'deletePublishers'])->name('deletePublishers');
+    });
     Route::get('/home-admin', [AdminHomeController::class, 'homeAdmin'])->name('homeAdmin');
     Route::get('/analytic-admin', [AdminController::class, 'adminAnalytic'])->name('adminAnalytic');
 });
@@ -57,9 +85,10 @@ Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
     Route::get('/home', [ClientHomeController::class, 'index'])->name('index');
     Route::get('/contact', [ClientHomeController::class, 'contact'])->name('contact');
     Route::get('/shop-products', [ClientProductController::class, 'shopProducts'])->name('shopProducts');
-    Route::get('/product-details', [ClientProductController::class, 'productDetails'])->name('productDetails');
+    Route::get('/product-details/{idProduct}', [ClientHomeController::class, 'productDetails'])->name('productDetails');
     Route::get('/cart', [CartController::class, 'cart'])->name('cart');
     Route::get('/check-out', [CartController::class, 'checkOut'])->name('checkOut');
+    Route::get('/search', [ClientProductController::class, 'search'])->name('search');
 });
 
 

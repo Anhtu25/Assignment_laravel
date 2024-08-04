@@ -9,6 +9,7 @@
     <meta content="Free HTML Templates" name="description">
 
     @include('clients.layouts.style')
+    @stack('style')
 </head>
 
 <body>

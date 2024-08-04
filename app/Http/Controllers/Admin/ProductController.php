@@ -39,6 +39,8 @@ class ProductController extends Controller
             'publisher_id' => $req->publisherProduct,
             'category_id' => $req->categoryProduct,
             'price' => $req->priceProduct,
+            'price_sale' => $req->priceSaleProduct,
+            'short_description' => $req->shortDescriptionProduct,
             'description' => $req->descriptionProduct,
             'year_published' => $req->yearPublishedProduct,
             'image' => $linkImage
@@ -89,6 +91,8 @@ class ProductController extends Controller
             'publisher_id' => $req->publisherProduct,
             'category_id' => $req->categoryProduct,
             'price' => $req->priceProduct,
+            'price_sale' => $req->priceSaleProduct,
+            'short_description' => $req->shortDescriptionProduct,
             'description' => $req->descriptionProduct,
             'year_published' => $req->yearPublishedProduct,
             'image' => $imageUrl

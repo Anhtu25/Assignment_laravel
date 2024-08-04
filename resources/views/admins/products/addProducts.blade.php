@@ -19,6 +19,10 @@
                             <input type="number" name="priceProduct" id="priceProduct" class="form-control">
                         </div>
                         <div class="mt-3">
+                            <label for="priceSaleProduct">Giá bán sản phẩm</label>
+                            <input type="number" name="priceSaleProduct" id="priceSaleProduct" class="form-control">
+                        </div>
+                        <div class="mt-3">
                             <label for="authorProduct">Tên tác giả</label>
                             <select name="authorProduct" class="form-control" id="">
                                 @foreach ($authorProduct as $value)
@@ -35,7 +39,7 @@
                             </select>
                         </div>
                         <div class="mt-3">
-                            <label for="yearPublishedProduct">Năm sản xuất</label>
+                            <label for="yearPublishedProduct">Năm xuất bản</label>
                             <input type="year" name="yearPublishedProduct" id="yearPublishedProduct"
                                 class="form-control">
                         </div>
@@ -45,8 +49,12 @@
                                 class="form-control">
                         </div>
                         <div class="mt-3">
+                            <label for="shortDescriptionProduct">Mô tả ngắn</label>
+                            <textarea type="text" name="shortDescriptionProduct" id="shortDescriptionProduct" class="form-control h-100"></textarea>
+                        </div>
+                        <div class="mt-3">
                             <label for="descriptionProduct">Mô tả</label>
-                            <textarea type="text" name="descriptionProduct" id="descriptionProduct" class="form-control"></textarea>
+                            <textarea type="text" name="descriptionProduct" id="descriptionProduct" class="form-control h-100"></textarea>
                         </div>
                         <div class="mt-3">
                             <label for="categoryProduct">Danh mục</label>

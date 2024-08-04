@@ -31,7 +31,11 @@ class AuthenController extends Controller
                 'password.max' => 'Mật khẩu quá dài ...'
             ]
         );
-        if (Auth::attempt([
+
+        $credentials = $req->only('email', 'password');
+        $remember = $req->has('remember');
+
+        if (Auth::attempt($credentials, $remember,[
             'email' => $req->email,
             'password' => $req->password
         ])) {
@@ -65,17 +69,7 @@ class AuthenController extends Controller
             'password.max' => 'Mật khẩu quá dài ...'
         ]);
 
-        $credentials = $req->only('email', 'password');
-        $remember = $req->has('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
-            return redirect()->route('admins.homeAdmin');
-        } else {
-            return redirect()->back()->with([
-                'errorsMessage' => 'Email hoặc Mật Khẩu không đúng !!!'
-            ]);
-        }
-        
         $check = User::where('email', $req->email)->exists();
         if (!$check) {
             $newUser = new User();
@@ -91,7 +85,7 @@ class AuthenController extends Controller
             ]);
         }
         return redirect()->back()->with([
-            'message' => 'Thêm thành công ! '
+            'message' => 'Đăng ký thành công !'
         ]);
     }
     public function forgotpassword()

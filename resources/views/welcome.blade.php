@@ -1,4 +1,4 @@
-{{-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -130,69 +130,5 @@
             </div>
         </div>
     </body>
-</html> --}}
-<div class="pt-3" style="min-height: 800px;">
-    <h4 class="text-primary mb-4">Danh sách sản phẩm</h4>
-    @if (session('message'))
-        <div class="alert alert-primary" role="alert">
-            {{ session('message') }}
-        </div>
-    @endif
-    <a href="{{ route('admins.products.addProducts') }}"><button class="btn btn-info">Thêm mới</button></a>
-    <div class="table-responsive table-card mt-3 mb-1">
-        <table class="table align-middle table-nowrap" id="customerTable">
-            <thead class="table-light">
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th  scope="col">STT</th>
-                    <th  scope="col">Tên sản phẩm</th>
-                    <th  scope="col">Ảnh</th>
-                    <th  scope="col">Tên tác giả</th>
-                    <th  scope="col">Nhà xuất bản</th>
-                    <th  scope="col">Năm xuất bản</th>
-                    <th  scope="col">Giá sản phẩm</th>
-                    <th  scope="col">Mô tả</th>
-                    <th  scope="col">Hành động</th>
-                </tr>
-            </thead>
-            <tbody class="list form-check-all">
-                @foreach ($products as $key => $value)
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th scope='row'>{{ $key + 1 }}</th>
-                        <td class="customer_name">{{ $value->name }}</td>
-                        <td><img class="img-product" src="/{{ $value->image }}" alt="{{ $value->name }}" width="100px">
-                        </td>
-                        <td class="author">{{ $value->author_id }}</td>
-                        <td>{{ $value->publisher_id }}</td>
-                        <td>{{ $value->year_published}}</td>
-                        <td>{{ $value->description }}</td>
-                        <td>{{ $value->price }}</td>
-                        <td>{{ $value->category_id }}</td>
-                        <td>
+</html>
 
-                            {{-- <a href="{{ route('admin.products.detailProduct',$value->id) }}"><button class="btn btn-primary">Chi tiết</button></a> --}}
-                            <button class="btn btn-warning">Sửa</button>
-                            <button class="btn btn-danger btn-delete" data-bs-id="{{ $value->id }}" data-bs-toggle="modal"
-                                data-bs-target="#deleteModel">Xóa</button>
-                        </td>
-                    </tr>
-                @endforeach
-
-            </tbody>
-        </table>
-        <div class="noresult" style="display: none">
-            <div class="text-center">
-                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                    colors="primary:#121331,secondary:#08a88a"
-                    style="width:75px;height:75px"></lord-icon>
-                <h5 class="mt-2">Sorry! No Result Found</h5>
-                <p class="text-muted mb-0">We've searched more than 150+ Orders We did not find any
-                    orders for you search.</p>
-            </div>
-        </div>
-    </div>
-</div>

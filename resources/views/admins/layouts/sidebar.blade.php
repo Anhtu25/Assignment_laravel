@@ -87,7 +87,13 @@
                                 <a href="{{ route('admins.products.listProducts') }}" class="nav-link" data-key="t-chat"> Products </a>
                             </li>
                             <li class="nav-item">
-                                <a href="apps-chat.html" class="nav-link" data-key="t-chat"> Categories </a>
+                                <a href="{{ route('admins.categories.listCategories') }}" class="nav-link" data-key="t-chat"> Categories </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admins.authors.listAuthors') }}" class="nav-link" data-key="t-chat"> Author </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admins.publishers.listPublishers') }}" class="nav-link" data-key="t-chat"> Publisher </a>
                             </li>
                             {{-- <li class="nav-item">
                                 <a href="#sidebarEmail" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarEmail" data-key="t-email">
@@ -391,7 +397,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLayouts">
                         <i class="ri-layout-3-line"></i> <span data-key="t-layouts">Layouts</span> <span class="badge badge-pill bg-danger" data-key="t-hot">Hot</span>
                     </a>
@@ -1069,7 +1075,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
             </ul>
         </div>

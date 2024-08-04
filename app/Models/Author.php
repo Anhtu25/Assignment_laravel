@@ -9,6 +9,9 @@ class Author extends Model
 {
     use HasFactory;
     protected $table = 'authors';
+    public $fillable =[
+        'name'
+    ];
     public function products()
     {
         return $this->hasMany(Product::class);

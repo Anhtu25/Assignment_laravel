@@ -23,6 +23,11 @@
                                 value="{{ $product->price }}" required>
                         </div>
                         <div class="mt-3">
+                            <label for="priceSaleProduct">Giá bán sản phẩm</label>
+                            <input type="number" name="priceSaleProduct" id="priceSaleProduct" class="form-control"
+                                value="{{ $product->price }}" required>
+                        </div>
+                        <div class="mt-3">
                             <label for="authorProduct">Tên tác giả</label>
                             <select name="authorProduct" class="form-control" id="authorProduct">
                                 @foreach ($authorProduct as $value)
@@ -52,6 +57,11 @@
                             <input type="file" name="imageProduct" id="imageProduct" accept="image/*"
                                 class="form-control">
                             <img src="{{ asset($product->image) }}" width="300px" alt="">
+                        </div>
+                        <div class="mt-3">
+                            <label for="shortDescriptionProduct">Mô tả ngắn</label>
+                            <input type="text" name="shortDescriptionProduct" id="shortDescriptionProduct" class="form-control"
+                                value="{{ $product->short_description }}">
                         </div>
                         <div class="mt-3">
                             <label for="descriptionProduct">Mô tả</label>
