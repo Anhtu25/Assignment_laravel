@@ -38,6 +38,13 @@ class ProductController extends Controller
 
         return view('clients.products.shop_products', compact('homeCategories', 'products'));
     }
+    public function filterByCategory($id)
+    {
+        $homeCategories = Category::find($id);
+        $products = Product::where('category_id', $id)->get();
+
+        return view('clients.products.shop_products', compact('products', 'homeCategories'));
+    }
 
     // public function productDetails($idProduct){
     //     $detailProduct = Product::where('id', $idProduct)->first();

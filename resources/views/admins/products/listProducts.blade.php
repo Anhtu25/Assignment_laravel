@@ -4,7 +4,7 @@
 @push('styles')
     <style>
         .img-product {
-            width: 50px;
+            width: 80px;
             object-fit: cover;
         }
     </style>
@@ -84,7 +84,7 @@
                                                 </th>
                                                 <th scope='row'>{{ $key + 1 }}</th>
                                                 <td class="customer_name">{{ \Illuminate\Support\Str::limit($value->name, 18, '...') }}</td>
-                                                <td><img class="img-product" src="{{ asset($value->image) }}"
+                                                <td><img class="img-product" src="{{ Storage::url($value->image) }}"
                                                         alt="{{ \Illuminate\Support\Str::limit($value->name) }}"></td>
                                                         <td>{{ $value->price }}</td>
                                                         <td>{{ $value->price_sale }}</td>

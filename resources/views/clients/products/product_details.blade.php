@@ -20,7 +20,7 @@
                     <div id="product-carousel" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner border">
                             <div class="carousel-item active">
-                                <img class="img-fluid w-100 " src="{{ asset($products->image) }}"
+                                <img class="img-fluid w-100 " src="{{ Storage::url($products->image) }}"
                                     alt="{{ $products->name }}">
                             </div>
 
@@ -50,7 +50,7 @@
 
                         <h3 class="font-weight-semi-bold text-danger mb-4">
                             {{ number_format($products->price_sale, 0, ',', '.') }}đ</h3>
-                        <h3 class="font-weight-semi-bold mb-4 mx-3">{{ number_format($products->price, 0, ',', '.') }}đ</h3>
+                        <h3 class="text-muted  font-weight-semi-bold mb-4 mx-3"><del>{{ number_format($products->price, 0, ',', '.') }}đ</del></h3>
                     </div>
 
                     <p class="mb-4">{{ $products->short_description }}.</p>
@@ -229,7 +229,7 @@
                                 class="link-underline-dark">
                                 <div
                                     class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                                    <img class="img-fluid w-100" src="{{ asset($value->image) }}"
+                                    <img class="img-fluid w-100" src="{{ Storage::url($value->image) }}"
                                         alt="{{ $value->name }}">
                                 </div>
                             </a>
@@ -238,7 +238,8 @@
                                 <div class="d-flex justify-content-center">
                                     <h6 class="text-danger">{{ number_format($value->price_sale, 0, ',', '.') }}đ</h6>
                                     <h6 class="text-muted ml-2">
-                                        <del>{{ number_format($value->price, 0, ',', '.') }}đ</del></h6>
+                                        <del>{{ number_format($value->price, 0, ',', '.') }}đ</del>
+                                    </h6>
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
@@ -246,9 +247,13 @@
                                     class="btn btn-sm text-dark p-0 link-underline-dark">
                                     <i class="fas fa-eye text-primary mr-1"></i>View Detail
                                 </a>
-                                <a href="" class="btn btn-sm text-dark p-0">
-                                    <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
-                                </a>
+                                <form action="{{ route('clients.addToCart') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="number" name="quantity" value="1"> <br>
+                                    <button class="btn btn-success">Add To Cart</button>
+                                </form>
+
                             </div>
                         </div>
                     @endforeach

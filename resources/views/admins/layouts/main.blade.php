@@ -18,7 +18,6 @@
 </head>
 
 <body>
-
     <!-- Header -->
     <div id="layout-wrapper">
         @include('admins.layouts.header')

@@ -13,10 +13,16 @@
                         <div class="mt-3">
                             <label for="nameProduct">Tên sản phẩm</label>
                             <input type="text" name="nameProduct" id="nameProduct" class="form-control">
+                            @error('nameProduct')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mt-3">
                             <label for="priceProduct">Giá sản phẩm</label>
                             <input type="number" name="priceProduct" id="priceProduct" class="form-control">
+                            @error('priceProduct')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mt-3">
                             <label for="priceSaleProduct">Giá bán sản phẩm</label>
@@ -42,6 +48,9 @@
                             <label for="yearPublishedProduct">Năm xuất bản</label>
                             <input type="year" name="yearPublishedProduct" id="yearPublishedProduct"
                                 class="form-control">
+                                @error('yearPublishedProduct')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mt-3">
                             <label for="imageProduct">Ảnh</label>
@@ -51,10 +60,16 @@
                         <div class="mt-3">
                             <label for="shortDescriptionProduct">Mô tả ngắn</label>
                             <textarea type="text" name="shortDescriptionProduct" id="shortDescriptionProduct" class="form-control h-100"></textarea>
+                            @error('shortDescriptionProduct')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mt-3">
                             <label for="descriptionProduct">Mô tả</label>
                             <textarea type="text" name="descriptionProduct" id="descriptionProduct" class="form-control h-100"></textarea>
+                            @error('descriptionProduct')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mt-3">
                             <label for="categoryProduct">Danh mục</label>

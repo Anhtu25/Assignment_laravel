@@ -56,7 +56,7 @@
                             <label for="imageProduct">Ảnh</label>
                             <input type="file" name="imageProduct" id="imageProduct" accept="image/*"
                                 class="form-control">
-                            <img src="{{ asset($product->image) }}" width="300px" alt="">
+                            <img src="{{ Storage::url($product->image) }}" width="300px" alt="">
                         </div>
                         <div class="mt-3">
                             <label for="shortDescriptionProduct">Mô tả ngắn</label>

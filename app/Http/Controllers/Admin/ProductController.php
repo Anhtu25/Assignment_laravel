@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Http\Requests\StoreProductRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -23,15 +25,14 @@ class ProductController extends Controller
         $publisherProduct = DB::table('publisher')->select('id', 'name')->get();
         return view('admins.products.addProducts', compact('categoryProduct', 'authorProduct', 'publisherProduct'));
     }
-    public function postProducts(Request $req)
+    public function postProducts(StoreProductRequest $req)
     {
-        $linkImage = '';
+        $linkImage = null;
         if ($req->hasFile('imageProduct')) {
             $image = $req->file('imageProduct');
             $nameImage = time() . "." . $image->getClientOriginalExtension();
-            $link = "imageProducts/";
-            $image->move(public_path($link), $nameImage);
-            $linkImage = $link . $nameImage;
+            $linkImage = $image->storeAs('image',$nameImage,'public');
+
         }
         $data = [
             'name' => $req->nameProduct,
@@ -77,12 +78,11 @@ class ProductController extends Controller
         $product = Product::findOrFail($idProduct);
         $imageUrl = $product->image;
         if ($req->hasFile('imageProduct')) {
-            File::delete(public_path($product->image));
+            Storage::disk('public')->delete($product->image);
             $image = $req->file('imageProduct');
             $nameImage = time() . "." . $image->getClientOriginalExtension();
-            $link = "imageProducts/";
-            $image->move(public_path($link), $nameImage);
-            $imageUrl = $link . $nameImage;
+            $imageUrl = $image->storeAs('image',$nameImage,'public');
+
         }
 
         $product->update([

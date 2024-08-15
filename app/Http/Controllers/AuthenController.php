@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Directory;
+use App\Models\User;
+use App\Mail\NewRegistered;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 
 class AuthenController extends Controller
 {
     public function login()
     {
+
         return view('auth.Login');
     }
     public function postLogin(Request $req)
@@ -68,7 +71,6 @@ class AuthenController extends Controller
             'password.min' => 'Vui lòng nhập mật khẩu dài hơn 8 kí tự ',
             'password.max' => 'Mật khẩu quá dài ...'
         ]);
-
 
         $check = User::where('email', $req->email)->exists();
         if (!$check) {

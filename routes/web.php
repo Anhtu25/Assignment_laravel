@@ -1,17 +1,18 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthenController as AuthenController;
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Admin\AuthorController as AdminAuthorController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PublisherController;
+use App\Http\Controllers\AuthenController as AuthenController;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
+use App\Http\Controllers\Admin\AuthorController as AdminAuthorController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 
@@ -62,26 +63,26 @@ Route::group(['prefix' => 'admins', 'as' => 'admins.', 'middleware' => 'checkAdm
         Route::delete('/del-category', [CategoryController::class, 'deleteCategories'])->name('deleteCategories');
     });
     Route::group(['prefix' => 'authors', 'as' => 'authors.'], function () {
-        Route::get('/list-author',[AdminAuthorController::class,'listAuthors'])->name('listAuthors');
-        Route::get('/add-author',[AdminAuthorController::class,'addAuthors'])->name('addAuthors');
-        Route::post('/add-author',[AdminAuthorController::class,'storeAuthors'])->name('storeAuthors');
-        Route::get('/edit-author/{idAuthor}',[AdminAuthorController::class,'editAuthors'])->name('editAuthors');
-        Route::patch('/update-author/{idAuthor}',[AdminAuthorController::class,'updateAuthors'])->name('updateAuthors');
-        Route::delete('/delete-author',[AdminAuthorController::class,'deleteAuthors'])->name('deleteAuthors');
+        Route::get('/list-author', [AdminAuthorController::class, 'listAuthors'])->name('listAuthors');
+        Route::get('/add-author', [AdminAuthorController::class, 'addAuthors'])->name('addAuthors');
+        Route::post('/add-author', [AdminAuthorController::class, 'storeAuthors'])->name('storeAuthors');
+        Route::get('/edit-author/{idAuthor}', [AdminAuthorController::class, 'editAuthors'])->name('editAuthors');
+        Route::patch('/update-author/{idAuthor}', [AdminAuthorController::class, 'updateAuthors'])->name('updateAuthors');
+        Route::delete('/delete-author', [AdminAuthorController::class, 'deleteAuthors'])->name('deleteAuthors');
     });
-    Route::group(['prefix' => 'publishers', 'as' => 'publishers.'], function(){
-        Route::get('/list-publisher',[PublisherController::class,'listPublishers'])->name('listPublishers');
-        Route::get('/add-publisher',[PublisherController::class,'addPublishers'])->name('addPublishers');
-        Route::post('/add-publisher',[PublisherController::class,'storePublishers'])->name('storePublishers');
-        Route::get('/edit-publishers/{idPublisher}',[PublisherController::class,'editPublishers'])->name('editPublishers');
-        Route::patch('/update-publishers/{idPublisher}',[PublisherController::class,'updatePublishers'])->name('updatePublishers');
-        Route::delete('/delete-publisher',[PublisherController::class,'deletePublishers'])->name('deletePublishers');
+    Route::group(['prefix' => 'publishers', 'as' => 'publishers.'], function () {
+        Route::get('/list-publisher', [PublisherController::class, 'listPublishers'])->name('listPublishers');
+        Route::get('/add-publisher', [PublisherController::class, 'addPublishers'])->name('addPublishers');
+        Route::post('/add-publisher', [PublisherController::class, 'storePublishers'])->name('storePublishers');
+        Route::get('/edit-publishers/{idPublisher}', [PublisherController::class, 'editPublishers'])->name('editPublishers');
+        Route::patch('/update-publishers/{idPublisher}', [PublisherController::class, 'updatePublishers'])->name('updatePublishers');
+        Route::delete('/delete-publisher', [PublisherController::class, 'deletePublishers'])->name('deletePublishers');
     });
     Route::get('/home-admin', [AdminHomeController::class, 'homeAdmin'])->name('homeAdmin');
     Route::get('/analytic-admin', [AdminController::class, 'adminAnalytic'])->name('adminAnalytic');
 });
 
-Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
+Route::group(['prefix' => 'clients', 'as' => 'clients.' ,'middleware' => ['auth.redirect']], function () {
     Route::get('/home', [ClientHomeController::class, 'index'])->name('index');
     Route::get('/contact', [ClientHomeController::class, 'contact'])->name('contact');
     Route::get('/shop-products', [ClientProductController::class, 'shopProducts'])->name('shopProducts');
@@ -89,6 +90,17 @@ Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
     Route::get('/cart', [CartController::class, 'cart'])->name('cart');
     Route::get('/check-out', [CartController::class, 'checkOut'])->name('checkOut');
     Route::get('/search', [ClientProductController::class, 'search'])->name('search');
+    Route::get('/categories/{idCategories}', [ClientHomeController::class, 'filterByCategory'])->name('filterByCategory');
+
+    Route::group([
+        'middleware' => 'checkUser'
+    ], function() {
+        Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
+        Route::get('view-cart', [CartController::class, 'cart'])->name('cart');
+        Route::patch('update-cart', [CartController::class, 'updateCart'])->name('updateCart');
+        Route::delete('delete-cart', [CartController::class, 'deleteCart'])->name('deleteCart');
+
+    });
 });
 
 
@@ -108,3 +120,6 @@ Route::group(['prefix' => 'authors', 'as' => 'authors.'], function () {
     Route::get('/PasswordChange', [AuthenController::class, 'PasswordChange'])->name('PasswordChange');
     Route::get('/notificationDone', [AuthenController::class, 'notificationDone'])->name('notificationDone');
 });
+
+Route::get('test',[UserController::class,'test'])->name('test');
+Route::post('post-test',[UserController::class,'postTest'])->name('postTest');

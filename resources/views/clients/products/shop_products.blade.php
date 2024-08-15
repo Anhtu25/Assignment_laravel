@@ -169,7 +169,7 @@
                                     class="link-underline-dark">
                                     <div
                                         class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                                        <img class="img-fluid w-100" src="{{ asset($value->image) }}"
+                                        <img class="img-fluid w-100" src="{{ Storage::url($value->image) }}"
                                             alt="{{ $value->name }}">
                                     </div>
                                 </a>

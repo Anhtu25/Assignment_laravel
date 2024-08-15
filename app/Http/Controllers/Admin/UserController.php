@@ -105,4 +105,19 @@ class UserController extends Controller
         }
         return redirect()->back()->with(['message' => 'Chỉnh sửa thành công']);
     }
+
+
+    public function test()
+    {
+        return view('test');
+    }
+    public function postTest(Request $req)
+    {
+        if ($req->hasFile('image')) {
+            $image = $req->file('image');
+            $newName = time() . '-' . $image->getClientOriginalName();
+            $path = $image->storeAs('images', $newName, 'public');
+            echo $path;
+        }
+    }
 }
