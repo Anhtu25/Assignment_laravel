@@ -26,7 +26,7 @@
         </a>
         <a href="{{ route('clients.cart') }}" class="btn border">
             <i class="fas fa-shopping-cart text-primary"></i>
-            <span class="badge">0</span>
+            <span class="badge" data-target="{{ $cartQuantity }}">{{ $cartQuantity }}</span>
         </a>
     </div>
 </div>

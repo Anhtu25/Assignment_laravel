@@ -22,7 +22,15 @@ class Product extends Model
         'category_id',
         'image',
     ];
+    public function images()
+    {
+        return $this->hasMany(ImageUrl::class, 'product_id');
+    }
 
+    public function cartDetails()
+    {
+        return $this->hasMany(CartDetail::class, 'product_id');
+    }
     // Thiết lập mối quan hệ với model ImageUrl
     public function author()
     {

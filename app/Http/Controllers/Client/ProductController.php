@@ -2,24 +2,55 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\CartDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     public function shopProducts()
     {
+        $userId = Auth::id(); // Lấy ID người dùng hiện tại
+
+        // Lấy ID giỏ hàng của người dùng hiện tại
+        $cartId = DB::table('cart')->where('user_id', $userId)->value('id');
+
+        if ($cartId) {
+            // Đếm tổng số lượng sản phẩm trong giỏ hàng đó
+            $cartQuantity = DB::table('cart_detail')
+                ->where('cart_id', $cartId)
+                ->count();
+        } else {
+            // Nếu không có giỏ hàng, số lượng sản phẩm là 0
+            $cartQuantity = 0;
+        }
         $homeCategories = Category::select('categories.name')
             ->limit('10')
             ->get();
         $products = Product::paginate(9);
-        return view('clients.products.shop_products', compact('homeCategories', 'products'));
+        return view('clients.products.shop_products', compact('homeCategories', 'products','cartQuantity'));
     }
+
     public function search(Request $req)
     {
+        $userId = Auth::id(); // Lấy ID người dùng hiện tại
+
+        // Lấy ID giỏ hàng của người dùng hiện tại
+        $cartId = Cart::where('user_id', $userId)->value('id');
+
+        if ($cartId) {
+            // Đếm tổng số lượng sản phẩm trong giỏ hàng đó
+            $cartQuantity = CartDetail::where('cart_id', $cartId)
+                ->count();
+        } else {
+            // Nếu không có giỏ hàng, số lượng sản phẩm là 0
+            $cartQuantity = 0;
+        }
         $nameSearch = $req->input('nameSearch');
         $categories = $req->input('categories');
 
@@ -36,7 +67,7 @@ class ProductController extends Controller
             ->limit(10)
             ->get();
 
-        return view('clients.products.shop_products', compact('homeCategories', 'products'));
+        return view('clients.products.shop_products', compact('homeCategories', 'products','cartQuantity'));
     }
     public function filterByCategory($id)
     {

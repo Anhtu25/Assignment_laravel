@@ -3,8 +3,10 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ExcelController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -35,6 +37,13 @@ Route::group(['prefix' => 'admins', 'as' => 'admins.', 'middleware' => 'checkAdm
     Route::group(['prefix' => 'profiles', 'as' => 'profiles.'], function () {
         Route::get('/profile-page', [ProfileController::class, 'profilePageAdmin'])->name('profilePageAdmin');
         Route::get('/profile-setting', [ProfileController::class, 'profileSettingAdmin'])->name('profileSettingAdmin');
+    });
+
+    // Nhom Excel
+    route::group(['prefix'=>'excels', 'as'=>'excels.'],function(){
+        Route::get('viewExport',[ExcelController::class, 'viewExport'])->name('viewExport');
+        Route::get('exportFile',[ExcelController::class, 'exportFile'])->name('exportFile');
+        Route::get('importExcelFile',[ExcelController::class, 'importExcelFile'])->name('importExcelFile');
     });
     // Nhom quan ly user
     route::group(['prefix' => 'users', 'as' => 'users.',], function () {
@@ -80,27 +89,40 @@ Route::group(['prefix' => 'admins', 'as' => 'admins.', 'middleware' => 'checkAdm
     });
     Route::get('/home-admin', [AdminHomeController::class, 'homeAdmin'])->name('homeAdmin');
     Route::get('/analytic-admin', [AdminController::class, 'adminAnalytic'])->name('adminAnalytic');
+    Route::get('/search', [AdminProductController::class, 'search'])->name('search');
+
 });
 
-Route::group(['prefix' => 'clients', 'as' => 'clients.' ,'middleware' => ['auth.redirect']], function () {
+Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
     Route::get('/home', [ClientHomeController::class, 'index'])->name('index');
     Route::get('/contact', [ClientHomeController::class, 'contact'])->name('contact');
     Route::get('/shop-products', [ClientProductController::class, 'shopProducts'])->name('shopProducts');
     Route::get('/product-details/{idProduct}', [ClientHomeController::class, 'productDetails'])->name('productDetails');
-    Route::get('/cart', [CartController::class, 'cart'])->name('cart');
-    Route::get('/check-out', [CartController::class, 'checkOut'])->name('checkOut');
+    // Route::get('/cart', [CartController::class, 'cart'])->name('cart');
+    // Route::get('/check-out', [CartController::class, 'checkOut'])->name('checkOut');
     Route::get('/search', [ClientProductController::class, 'search'])->name('search');
     Route::get('/categories/{idCategories}', [ClientHomeController::class, 'filterByCategory'])->name('filterByCategory');
 
     Route::group([
         'middleware' => 'checkUser'
-    ], function() {
+    ], function () {
         Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
         Route::get('view-cart', [CartController::class, 'cart'])->name('cart');
         Route::patch('update-cart', [CartController::class, 'updateCart'])->name('updateCart');
         Route::delete('delete-cart', [CartController::class, 'deleteCart'])->name('deleteCart');
-
     });
+    // Route::get('/cart-quantity', [UserController::class, 'cartQuantity'])->name('cartQuantity');
+});
+Route::group([
+    'prefix' => 'order',
+    'as'=>'order.',
+    'middleware' => 'checkUser'
+], function () {
+    Route::get('view-checkout', [CheckOutController::class, 'checkout'])->name('checkout');
+    Route::post('post-checkout', [CheckOutController::class, 'postCheckout'])->name('postCheckout');
+
+    // Route::patch('update-cart', [CheckOutController::class, 'updateCart'])->name('updateCart');
+    // Route::delete('delete-cart', [CheckOutController::class, 'deleteCart'])->name('deleteCart');
 });
 
 
@@ -121,5 +143,5 @@ Route::group(['prefix' => 'authors', 'as' => 'authors.'], function () {
     Route::get('/notificationDone', [AuthenController::class, 'notificationDone'])->name('notificationDone');
 });
 
-Route::get('test',[UserController::class,'test'])->name('test');
-Route::post('post-test',[UserController::class,'postTest'])->name('postTest');
+Route::get('test', [UserController::class, 'test'])->name('test');
+Route::post('post-test', [UserController::class, 'postTest'])->name('postTest');

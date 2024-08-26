@@ -1,175 +1,150 @@
 @extends('clients.layouts.main')
 @section('content')
-<!-- Page Header Start -->
-<div class="container-fluid bg-secondary mb-5">
-    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-        <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
-        <div class="d-inline-flex">
-            <p class="m-0"><a href="">Home</a></p>
-            <p class="m-0 px-2">-</p>
-            <p class="m-0">Shopping Cart</p>
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 100px">
+            <h5>Giỏ hàng (<span class="counter-value" data-target="{{ $cartQuantity }}">{{ $cartQuantity }} Sản phẩm</span> )
+            </h5>
+        </div>
+
+    </div>
+    <!-- Page Header End -->
+
+    @if (session('message'))
+        <div class="alert alert-success" role="alert">
+            {{ session('message') }}
+        </div>
+    @endif
+
+    <!-- Cart Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-12 table-responsive mb-5">
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Ảnh</th>
+                            <th>Giá bán</th>
+                            <th>Số lượng</th>
+                            <th>Tổng tiền</th>
+                            <th>Chức năng </th>
+                        </tr>
+                    </thead>
+
+                    @if (count($cart->cartDetails) != 0)
+                        <form action="{{ route('clients.updateCart') }}" method="post">
+                            @method('patch')
+                            @csrf
+                            <tbody class="align-middle">
+                                @php
+                                    $tongTien = 0;
+                                @endphp
+                                @foreach ($cart->cartDetails as $key => $cartDetail)
+                                    <tr>
+
+                                        <td class="align-middle">
+                                            {{ Illuminate\Support\Str::limit($cartDetail->product->name, 18, '...') }}</td>
+                                        <td class="align-middle">
+                                            <img src="{{ Storage::url($cartDetail->product->image) }}" width="100"
+                                                alt="" style="width: 100px;">
+                                        </td>
+                                        <td class="align-middle">{{ number_format($cartDetail->product->price_sale) }} VNĐ
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-sm btn-primary btn-minus">
+                                                        <i class="fa fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                                <input type="text" name="quantity[{{ $cartDetail->id }}]"
+                                                    class="form-control form-control-sm bg-secondary text-center"
+                                                    value="{{ $cartDetail->quantity }}">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-sm btn-primary btn-plus">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {{ number_format($cartDetail->product->price_sale * $cartDetail->quantity) }}
+                                            VNĐ
+                                        </td>
+                                        <td class="align-middle">
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModel"
+                                                data-bs-id="{{ $cartDetail->id }}"class="text-bold btn btn-sm btn-danger">
+                                                Xóa
+
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $tongTien += $cartDetail->product->price_sale * $cartDetail->quantity;
+
+                                    @endphp
+                                @endforeach
+                                <tr>
+                                    <td colspan="3" class="text-right">Tổng tiền:</td>
+                                    <td colspan="2">{{ number_format($tongTien) }} VNĐ</td>
+                                    <td colspan="2"> <a href="{{ route('order.checkout') }}" class="btn btn-block btn-primary text-white">Thanh
+                                            toán</a></td>
+                                </tr>
+                            </tbody>
+                        </form>
+                    @else
+                        <tbody>
+                            <tr>
+                                <td colspan="6">Bạn chưa có sản phẩm trong giỏ hàng</td>
+                                <td>
+                                    <a href="{{ route('clients.index') }}" class="btn btn-success">Tiếp tục mua hàng</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    @endif
+
+                </table>
+            </div>
+
         </div>
     </div>
-</div>
-<!-- Page Header End -->
-
-
-<!-- Cart Start -->
-<div class="container-fluid pt-5">
-    <div class="row px-xl-5">
-        <div class="col-lg-8 table-responsive mb-5">
-            <table class="table table-bordered text-center mb-0">
-                <thead class="bg-secondary text-dark">
-                    <tr>
-                        <th>Products</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Remove</th>
-                    </tr>
-                </thead>
-                <tbody class="align-middle">
-                    <tr>
-                        <td class="align-middle"><img src="assets/img/product-1.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-minus" >
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle"><img src="assets/img/product-2.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-minus" >
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle"><img src="assets/img/product-3.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-minus" >
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle"><img src="assets/img/product-4.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-minus" >
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle"><img src="assets/img/product-5.jpg" alt="" style="width: 50px;"> Colorful Stylish Shirt</td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-minus" >
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="align-middle">$150</td>
-                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-lg-4">
-            <form class="mb-5" action="">
-                <div class="input-group">
-                    <input type="text" class="form-control p-4" placeholder="Coupon Code">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary">Apply Coupon</button>
-                    </div>
+    <!-- Cart End -->
+    <div class="modal fade" id="deleteModel" tabindex="-1" aria-labelledby="deleteModel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="h3 fs-5" id="exampleModalLabel">Xác nhận xóa</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </form>
-            <div class="card border-secondary mb-5">
-                <div class="card-header bg-secondary border-0">
-                    <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3 pt-1">
-                        <h6 class="font-weight-medium">Subtotal</h6>
-                        <h6 class="font-weight-medium">$150</h6>
+                <form action="" method="post" id="formDelete">
+                    @method('delete')
+                    @csrf
+                    <div class="modal-body">
+                        Bạn có muốn xóa không???
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">$10</h6>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
                     </div>
-                </div>
-                <div class="card-footer border-secondary bg-transparent">
-                    <div class="d-flex justify-content-between mt-2">
-                        <h5 class="font-weight-bold">Total</h5>
-                        <h5 class="font-weight-bold">$160</h5>
-                    </div>
-                    <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
-<!-- Cart End -->
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var deleteModel = document.getElementById('deleteModel');
+        deleteModel.addEventListener('show.bs.modal', function(event) {
+            // Button that triggered the modal
+            var button = event.relatedTarget;
+            var cartDetailId = button.getAttribute('data-bs-id');
+
+            let formDelete = document.getElementById('formDelete');
+            formDelete.setAttribute('action', '{{ route('clients.deleteCart') }}?cartDetailId=' + cartDetailId);
+        });
+    </script>
+@endpush

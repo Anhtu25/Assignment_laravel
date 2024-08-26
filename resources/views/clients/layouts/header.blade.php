@@ -2,8 +2,8 @@
     <div class="row border-top px-xl-5">
         <div class="col-lg-3 d-none d-lg-block">
             <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100"
-                data-toggle="collapse" href="#navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
-                <h6 class="m-0">Categories</h6>
+                data-toggle="collapse" href="#navbar-vertical" data-target="#navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
+                <h6 class="m-0">Danh mục</h6>
                 <i class="fa fa-angle-down text-dark"></i>
             </a>
             <nav class="collapse {{ Route::is('clients.index') ? 'show' : '' }} navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light"
@@ -20,10 +20,10 @@
         </div>
         <div class="col-lg-9">
             <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
-                <a href="" class="text-decoration-none d-block d-lg-none">
+                {{-- <a href="" class="text-decoration-none d-block d-lg-none">
                     <h1 class="m-0 display-5 font-weight-semi-bold"><span
                             class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
-                </a>
+                </a> --}}
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -31,29 +31,30 @@
 
                     <div class="navbar-nav mr-auto py-0">
 
-                        <a href="{{ route('clients.index') }}" class="nav-item nav-link">Home</a>
-                        <a href="{{ route('clients.shopProducts') }}" class="nav-item nav-link active">Shop</a>
-                        <a href="" class="nav-item nav-link">Shop Detail</a>
-                        <div class="nav-item dropdown">
+                        <a href="{{ route('clients.index') }}" class="nav-item nav-link">Trang chủ</a>
+                        <a href="{{ route('clients.shopProducts') }}" class="nav-item nav-link active">Sản phẩm</a>
+                        {{-- <a href="" class="nav-item nav-link">Shop Detail</a> --}}
+                        {{-- <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                             <div class="dropdown-menu rounded-0 m-0">
                                 <a href="{{ route('clients.cart') }}" class="dropdown-item">Shopping Cart</a>
                                 <a href="{{ route('clients.checkOut') }}" class="dropdown-item">Checkout</a>
                             </div>
-                        </div>
-                        <a href="{{ route('clients.contact') }}" class="nav-item nav-link">Contact</a>
+                        </div> --}}
+                        <a href="{{ route('clients.contact') }}" class="nav-item nav-link">Liên hệ</a>
                     </div>
 
                     <div class="navbar-nav ml-auto py-0">
+
                         @guest
                             <!-- Hiển thị liên kết đăng nhập và đăng ký nếu người dùng chưa đăng nhập -->
-                            <a href="{{ route('login') }}" class="nav-item nav-link">Login</a>
-                            <a href="{{ route('register') }}" class="nav-item nav-link">Register</a>
+                            <a href="{{ route('authors.login') }}" class="nav-item nav-link">Đăng nhập</a>
+                            <a href="{{ route('authors.register') }}" class="nav-item nav-link">Đăng ký</a>
                         @else
                             <!-- Hiển thị tên người dùng và nút đăng xuất nếu người dùng đã đăng nhập -->
-                            <span class="nav-item nav-link">Hello, {{ Auth::user()->name }}</span>
+                            <span class="nav-item nav-link">Xin chào, {{ Auth::user()->name }}</span>
                             <a href="{{ route('authors.logout') }}" class="nav-item nav-link">
-                                Logout
+                                Đăng Xuất
                             </a>
 
                         @endguest

@@ -12,7 +12,7 @@
 @endpush
 @section('content')
     <!-- Shop Detail Start -->
-    <form action="" method="post" enctype="multipart/form-data">
+    {{-- <form action="" method="post" enctype="multipart/form-data"> --}}
         <input type="hidden" id="idProduct" value="{{ $products->id }}">
         <div class="container-fluid py-5">
             <div class="row px-xl-5">
@@ -50,7 +50,8 @@
 
                         <h3 class="font-weight-semi-bold text-danger mb-4">
                             {{ number_format($products->price_sale, 0, ',', '.') }}đ</h3>
-                        <h3 class="text-muted  font-weight-semi-bold mb-4 mx-3"><del>{{ number_format($products->price, 0, ',', '.') }}đ</del></h3>
+                        <h3 class="text-muted  font-weight-semi-bold mb-4 mx-3">
+                            <del>{{ number_format($products->price, 0, ',', '.') }}đ</del></h3>
                     </div>
 
                     <p class="mb-4">{{ $products->short_description }}.</p>
@@ -67,7 +68,7 @@
                         <label class="  " for="size-1">{{ $products->publisher->name }}
                     </div>
                     <div class="d-flex align-items-center mb-4 pt-2">
-                        <div class="input-group quantity mr-3" style="width: 130px;">
+                        {{-- <div class="input-group quantity mr-3" style="width: 130px;">
                             <div class="input-group-btn">
                                 <button class="btn btn-primary btn-minus">
                                     <i class="fa fa-minus"></i>
@@ -79,8 +80,24 @@
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
-                        </div>
-                        <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                        </div> --}}
+                        <form action="{{ route('clients.addToCart') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $products->id }}">
+                            <div class="row">
+                                <div class="col-auto">
+                                <input class="form-control border border-start-0" type="number" name="quantity"
+                                    min="1" value="1">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary text-white px-3">
+                                    <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
+                                </button>
+                            </div>
+                            </div>
+
+                        </form>
+
                     </div>
                     <div class="d-flex pt-2">
                         <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
@@ -104,9 +121,9 @@
             <div class="row px-xl-5">
                 <div class="col">
                     <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-                        <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                        <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a>
-                        <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
+                        <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Mô tả sản phẩm</a>
+                        {{-- <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a> --}}
+                        <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Bình luận & Đánh giá (0)</a>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
@@ -114,48 +131,11 @@
                             <p>{{ $products->description }}</p>
 
                         </div>
-                        {{-- <div class="tab-pane fade" id="tab-pane-2">
-                            <h4 class="mb-3">Additional Information</h4>
-                            <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0">
-                                            Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                        </li>
-                                      </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0">
-                                            Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                        </li>
-                                      </ul>
-                                </div>
-                            </div>
-                        </div> --}}
+
                         <div class="tab-pane fade" id="tab-pane-3">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="mb-4">1 review for "Colorful Stylish Shirt"</h4>
+                                    <h4 class="mb-4">(0) Đánh giá </h4>
                                     <div class="media mb-4">
                                         <img src="assets/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1"
                                             style="width: 45px;">
@@ -174,8 +154,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4 class="mb-4">Leave a review</h4>
-                                    <small>Your email address will not be published. Required fields are marked *</small>
+                                    <h4 class="mb-4">Đánh giá sản phẩm</h4>
+                                    <small>Địa chỉ email của bạn sẽ không được công bố. Các trường bắt buộc được đánh dấu *</small>
                                     <div class="d-flex my-3">
                                         <p class="mb-0 mr-2">Your Rating * :</p>
                                         <div class="text-primary">
@@ -211,7 +191,7 @@
             </div>
         </div>
 
-    </form>
+    {{-- </form> --}}
     <!-- Shop Detail End -->
 
 
@@ -249,9 +229,9 @@
                                 </a>
                                 <form action="{{ route('clients.addToCart') }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="number" name="quantity" value="1"> <br>
-                                    <button class="btn btn-success">Add To Cart</button>
+                                    <input type="hidden" name="product_id" value="{{ $products->id }}">
+                                    {{-- <input type="number" name="quantity" value="1"> <br> --}}
+                                    <button class="btn btn-primary text-white">Add To Cart</button>
                                 </form>
 
                             </div>

@@ -112,4 +112,5 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->back()->with(['message' => 'Xóa thành công']);
     }
+    
 }

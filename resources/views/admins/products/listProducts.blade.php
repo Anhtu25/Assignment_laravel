@@ -33,10 +33,10 @@
                                 <div class="col-sm">
                                     <div class="d-flex justify-content-sm-end">
                                         <div class="search-box ms-2">
-                                            <form action="{{ route('admins.users.userManager') }}" method="GET">
-                                                @csrf
-                                                <input type="text" class="form-control search"
-                                                    placeholder="Tìm Kiếm Người Dùng...">
+                                            <form action="{{ route('admins.search') }}">
+
+                                                <input type="text" class="form-control search" method="GET" name="nameSearch"
+                                                    placeholder="Tìm Kiếm Sản Phẩm...">
                                                 <i class="ri-search-line search-icon"></i>
 
                                             </form>
@@ -83,11 +83,12 @@
                                                     </div>
                                                 </th>
                                                 <th scope='row'>{{ $key + 1 }}</th>
-                                                <td class="customer_name">{{ \Illuminate\Support\Str::limit($value->name, 18, '...') }}</td>
+                                                <td class="customer_name">
+                                                    {{ \Illuminate\Support\Str::limit($value->name, 18, '...') }}</td>
                                                 <td><img class="img-product" src="{{ Storage::url($value->image) }}"
                                                         alt="{{ \Illuminate\Support\Str::limit($value->name) }}"></td>
-                                                        <td>{{ $value->price }}</td>
-                                                        <td>{{ $value->price_sale }}</td>
+                                                <td>{{ $value->price }}</td>
+                                                <td>{{ $value->price_sale }}</td>
                                                 <td class="author">{{ $value->author->name }}</td>
                                                 <td>{{ $value->publisher->name }}</td>
                                                 <td>{{ $value->year_published }}</td>
@@ -97,10 +98,10 @@
 
                                                 {{-- <td>{{ $value->category->name }}</td> --}}
                                                 <td>
-                                                    <a href="{{ route('admins.products.detailProducts', $value->id) }}"><button
-                                                            class="btn btn-primary">Chi tiết</button></a>
+                                                    <a href="{{ route('admins.products.detailProducts', $value->id) }}">
+                                                        <button class="btn btn-primary">Chi tiết</button></a><br>
                                                     <a href="{{ route('admins.products.editProducts', $value->id) }}"
-                                                        class="btn btn-warning">Sửa</a>
+                                                        class="btn btn-warning">Sửa</a><br>
                                                     <button class="btn btn-danger btn-delete"
                                                         data-bs-id="{{ $value->id }}" data-bs-toggle="modal"
                                                         data-bs-target="#deleteModel">Xóa</button>

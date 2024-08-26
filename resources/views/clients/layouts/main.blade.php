@@ -36,6 +36,7 @@
 
 
     @include('clients.layouts.js')
+    @stack('scripts')
 </body>
 
 </html>

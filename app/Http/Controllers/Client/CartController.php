@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\CartDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,10 +14,25 @@ class CartController extends Controller
 {
     public function cart()
     {
-        $homeCategories = Category::
-        select('categories.name')
-        ->limit('10')
-        ->get();
+        $userId = Auth::id(); // Lấy ID người dùng hiện tại
+
+        // Lấy ID giỏ hàng của người dùng hiện tại
+        $cartId = Cart::where('user_id', $userId)->value('id');
+
+        if ($cartId) {
+            // Đếm tổng số lượng sản phẩm trong giỏ hàng đó
+            $cartQuantity = CartDetail::where('cart_id', $cartId)
+                ->count();
+        } else {
+            // Nếu không có giỏ hàng, số lượng sản phẩm là 0
+            $cartQuantity = 0;
+        }
+
+
+
+        $homeCategories = Category::select('categories.name')
+            ->limit('10')
+            ->get();
         $cart = Cart::where('user_id', Auth::id())
             ->with('cartDetails:id,cart_id,product_id,quantity')
             ->with('cartDetails.product:id,name,price')
@@ -25,18 +41,18 @@ class CartController extends Controller
 
         return view('clients.cart.cart')->with([
             'cart'  => $cart,
-            'homeCategories'=>$homeCategories
+            'homeCategories' => $homeCategories,
+            'cartQuantity' => $cartQuantity
         ]);
     }
     public function checkOut()
     {
-        $homeCategories = Category::
-        select('categories.name')
-        ->limit('10')
-        ->get();
+        $homeCategories = Category::select('categories.name')
+            ->limit('10')
+            ->get();
         return view('clients.cart.check_out')->with([
 
-            'homeCategories'=>$homeCategories
+            'homeCategories' => $homeCategories
         ]);
     }
     public function addToCart(Request $req)
@@ -69,30 +85,43 @@ class CartController extends Controller
             ]);
         }
 
-        return redirect()->route('users.viewCart');
+        return redirect()->back();
     }
 
 
 
     public function updateCart(Request $req)
     {
-        foreach ($req->cartDetailId as $key =>  $cartDetailId) {
-            CartDetail::find($cartDetailId)->update([
-                'quantity' => $req->quantity[$key]
-            ]);
+        // Validation để kiểm tra dữ liệu đầu vào
+        $req->validate([
+            'quantity' => 'required|array',
+            'quantity.*' => 'integer|min:1' // Đảm bảo tất cả quantity đều là số nguyên và >= 1
+        ]);
+
+        foreach ($req->quantity as $cartDetailId => $quantity) {
+            // Tìm CartDetail theo ID
+            $cartDetail = CartDetail::find($cartDetailId);
+            if ($cartDetail) {
+                // Cập nhật số lượng
+                $cartDetail->update([
+                    'quantity' => $quantity
+                ]);
+            }
         }
 
-        return redirect()->back()->with([
-            'mesage' => 'Cập nhật thành công'
-        ]);
+        return redirect()->back()->with('message', 'Cập nhật thành công');
     }
+
+
 
 
     public function deleteCart(Request $req)
     {
-        CartDetail::find($req->cartDetailId)
-            ->delete();
+        // dd($req->cartDetailId);
+        $deleteCart =  CartDetail::find($req->cartDetailId);
+        $deleteCart->delete();
         return redirect()->back()->with([
+            // 'deleteCart' => $deleteCart,
             'message' => 'Xóa thành công'
         ]);
     }

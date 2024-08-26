@@ -5,6 +5,8 @@ namespace App\Http;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 use App\Http\Middleware\CheckAdminMiddleware;
+use App\Http\Middleware\CheckUserMiddleware;
+
 
 class Kernel extends HttpKernel
 {
@@ -68,5 +70,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'checkAdmin' => CheckAdminMiddleware::class,
         'auth.redirect' => \App\Http\Middleware\RedirectIfNotAuthenticated::class,
+        'checkUser' =>CheckUserMiddleware::class,
     ];
+    
 }
